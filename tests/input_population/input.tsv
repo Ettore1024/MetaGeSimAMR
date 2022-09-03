@@ -1,0 +1,4 @@
+Genome_ID	Species_Name	Abundance	PATRIC_ID	Antibiotic	Phenotype	Genome_length	Novelty_category	Genome_file
+E.coli	Escherichia Coli	0.5	562.65798	Ampicillin	Resistant	4806048	known_strain	562_65798.fna
+S.Aureus	Staphylococcus Aureus	0.3	1280.12908	Gentamicin	Susceptible	2817340	known_strain	1280_12908.fna
+S.pneumoniae	Streptococcus pneumoniae	0.2	1313.35771	Erythromycin	Resistant	2143328	known_strain	1313_35771.fna
