@@ -71,7 +71,7 @@ class StrainSelector(DefaultLogging):
 		self._column_name_otu = column_name_otu
 		self._column_name_novelty_category = column_name_novelty_category
 
-	def get_drawn_genome_id(self, metadata_table, number_of_strains, number_of_strains_per_otu):
+	def get_drawn_genome_id(self, metadata_table, number_of_strains, number_of_strains_per_otu, select_random_genomes):
 		"""
 		Get a list of drawn genome ids.
 
@@ -125,7 +125,7 @@ class StrainSelector(DefaultLogging):
 			raise ValueError(msg)
 
 		# sample OTUs from the pool of available OTUs
-		drawn_genome_id = self._draw_strains(categories, number_of_strains, number_of_strains_per_otu)
+		drawn_genome_id = self._draw_strains(categories, number_of_strains, number_of_strains_per_otu, select_random_genomes)
 		return drawn_genome_id
 
 	def _recalc(self, number_of_drawn):
@@ -159,7 +159,7 @@ class StrainSelector(DefaultLogging):
 		"""
 		return self._per_cat + (self._rest > 0)
 
-	def _draw_strains(self, categories, number_of_strains_to_draw, max_amount_of_strains_per_otu):
+	def _draw_strains(self, categories, number_of_strains_to_draw, max_amount_of_strains_per_otu, select_random_genomes):
 		"""
 		Get list of drawn strains
 
@@ -192,7 +192,7 @@ class StrainSelector(DefaultLogging):
 				self._recalc(categories[x].get_strain_amount())
 			else:
 				# draw subset of strains
-				drawn_genome_id += categories[x].draw_strains(self._per_category(), self._per_otu)
+				drawn_genome_id += categories[x].draw_strains(self._per_category(), self._per_otu, select_random_genomes)
 				self._substract()
 
 		if len(drawn_genome_id) < number_of_strains_to_draw:
@@ -231,7 +231,7 @@ class NoveltyCategory(object):
 		"""
 		return self._number_of_strains
 
-	def draw_strains(self, total, limit_per_otu):
+	def draw_strains(self, total, limit_per_otu, select_random_genomes):
 		"""
 		Draw subset of strains from this category
 
@@ -250,14 +250,25 @@ class NoveltyCategory(object):
 		drawn_strain = []
 		overhead = []
 		drawn_strain_count_overall = 0
-		for otu_id in random.sample(self._otu_list.keys(), len(self._otu_list)):
-			drawn_strain_count_otu = 0
-			for strain_id in random.sample(self._otu_list[otu_id], len(self._otu_list[otu_id])):
-				if drawn_strain_count_otu < limit_per_otu and drawn_strain_count_overall < total:
-					drawn_strain.append(strain_id)
-					drawn_strain_count_otu += 1
-					drawn_strain_count_overall += 1
-			overhead += list(set(self._otu_list[otu_id])-set(drawn_strain))
+
+		if select_random_genomes == False:
+			for otu_id in self._otu_list.keys():
+				drawn_strain_count_otu = 0
+				for strain_id in self._otu_list[otu_id]:
+					if drawn_strain_count_otu < limit_per_otu and drawn_strain_count_overall < total:
+						drawn_strain.append(strain_id)
+						drawn_strain_count_otu += 1
+						drawn_strain_count_overall += 1
+				overhead += list(set(self._otu_list[otu_id])-set(drawn_strain))
+		elif select_random_genomes == True:
+			for otu_id in random.sample(self._otu_list.keys(), len(self._otu_list)):
+				drawn_strain_count_otu = 0
+				for strain_id in random.sample(self._otu_list[otu_id], len(self._otu_list[otu_id])):
+					if drawn_strain_count_otu < limit_per_otu and drawn_strain_count_overall < total:
+						drawn_strain.append(strain_id)
+						drawn_strain_count_otu += 1
+						drawn_strain_count_overall += 1
+				overhead += list(set(self._otu_list[otu_id])-set(drawn_strain))
 
 		if drawn_strain_count_overall < total:
 			# out += overhead[0:total-drawn_strain_cound_overall]
