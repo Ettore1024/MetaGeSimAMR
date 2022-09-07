@@ -3,6 +3,8 @@ __original_author__ = 'eik.dahms@uni-duesseldorf.de'
 __version__ = '0.0.3'
 
 import random
+import csv
+import numpy as np
 from scripts.Validator.validator import Validator
 
 
@@ -15,6 +17,7 @@ class PopulationDistribution(Validator):
 	_label = "PopulationDistribution"
 
 	_modi = [
+		'known_distribution',
 		'replicates',
 		'timeseries_normal',
 		'timeseries_lognormal',
@@ -44,6 +47,7 @@ class PopulationDistribution(Validator):
 
 		if seed is not None:
 			random.seed(seed)
+			np.random.seed(seed)
 
 	@staticmethod
 	def get_valid_modes():
@@ -67,6 +71,72 @@ class PopulationDistribution(Validator):
 		assert isinstance(size_of_population, int)
 		assert isinstance(number_of_samples, int)
 		return [[0.0] * number_of_samples for _ in range(size_of_population)]
+
+	@staticmethod
+	def Broken_stick_model(genome, genomes_abundance_dict, genome_abundance, strains_num, bool_genomes_to_zero, param_b = 3):
+		"""
+			Comment here
+		"""
+		if strains_num == 0:
+
+			return genomes_abundance_dict
+
+		else:
+			if bool_genomes_to_zero == True:
+				sticks = np.random.beta(1, param_b, size = strains_num - 1)
+				sticks[1:] *= np.cumprod(1 - sticks[:-1])
+				sticks = np.insert(sticks, 0, 0)
+				sticks = np.insert(sticks, len(sticks), 1 - np.cumsum(sticks)[-1])
+				list_for_genome = list(sticks)
+				i=0
+				for key in genomes_abundance_dict.keys():
+					if str(genome) in str(key):
+						genomes_abundance_dict[key] = (list_for_genome[i] * genome_abundance)
+						i += 1
+
+			elif bool_genomes_to_zero == False:
+				sticks = np.random.beta(1, param_b, size = strains_num)
+				sticks[1:] *= np.cumprod(1 - sticks[:-1])
+				sticks = np.insert(sticks, 0, 1-np.cumsum(sticks)[-1])
+				list_for_genome = list(sticks)
+				i=0
+				for key in genomes_abundance_dict.keys():
+					if str(genome) in str(key):
+						genomes_abundance_dict[key] = (list_for_genome[i] * genome_abundance)
+						i += 1
+
+			return genomes_abundance_dict
+
+
+	def distribute_abundance_to_strains(self, population_list, samples_number, file_path_abundances, list_of_genome_id, input_genomes_to_zero):
+		"""
+			Comment here
+		"""
+
+		genome_to_strain = {}
+		genome_to_abundance_original = {}
+		with open(file_path_abundances, 'r') as abundance_file:
+			for row in csv.reader(abundance_file, delimiter='\t'):
+				genome_id = row[0]
+				genome_to_abundance_original[genome_id] = float(row[1])
+				genome_to_strain[genome_id] = 0
+
+		total_genome_abundance = genome_to_abundance_original.copy()
+
+		for genome_ID in list_of_genome_id:
+			if not genome_ID in genome_to_abundance_original.keys():
+				total_genome_abundance[genome_ID] = 0.0
+				for genome in genome_to_abundance_original.keys():
+					if str(genome) in str(genome_ID):
+						genome_to_strain[genome] += 1
+
+		for sample in range(samples_number):
+			abundances_dict = {}
+			for genome_id in genome_to_abundance_original.keys():
+				abundances_dict.update(self.Broken_stick_model(genome_id, total_genome_abundance, genome_to_abundance_original[genome_id], genome_to_strain[genome_id], input_genomes_to_zero))
+			for genome in abundances_dict.keys():
+				population_list[list_of_genome_id.index(genome)][sample] = abundances_dict[genome]
+
 
 	@staticmethod
 	def _add_initial_log_distribution(list_population, mu, sigma):
@@ -240,8 +310,8 @@ class PopulationDistribution(Validator):
 		plt.show()
 
 	def get_lists_of_distributions(
-		self, size_of_population, number_of_samples, modus, log_mu, log_sigma, gauss_mu=None, gauss_sigma=None,
-		view_distribution=False):
+		self, size_of_population, number_of_samples, abundance_file_path, bool_input_genomes_to_zero,
+		list_of_genome_id, modus, log_mu, log_sigma, gauss_mu=None, gauss_sigma=None, view_distribution=False):
 		"""
 			Get list of distributions of all samples
 
@@ -251,7 +321,7 @@ class PopulationDistribution(Validator):
 			@type size_of_population: int | long
 			@param number_of_samples: Number of samples
 			@type number_of_samples: int | long
-			@param modus: 'replicates', 'timeseries_normal','timeseries_lognormal', 'differential'
+			@param modus: 'known_distribution', 'replicates', 'timeseries_normal','timeseries_lognormal', 'differential'
 			@type modus: str
 			@param log_mu: Mean for log
 			@type log_mu: float
@@ -272,6 +342,7 @@ class PopulationDistribution(Validator):
 		assert isinstance(log_sigma, (float, int))
 		assert isinstance(gauss_mu, (float, int))
 		assert isinstance(gauss_sigma, (float, int))
+		list_of_genome_id_new = list(list_of_genome_id) #changes a dict.keys() into a list
 		if gauss_mu is None:
 			gauss_mu = 0
 		if gauss_sigma is None:
@@ -279,10 +350,14 @@ class PopulationDistribution(Validator):
 			gauss_sigma = 3 * log_sigma
 
 		list_population = self._get_initial_list(size_of_population, number_of_samples)
-		while True:
+
+		if modus != 'known_distribution':
 			self._add_initial_log_distribution(list_population, log_mu, log_sigma)
 
-			if modus == 'replicates':
+		while True:
+			if modus == 'known_distribution':
+				self.distribute_abundance_to_strains(list_population, number_of_samples, abundance_file_path, list_of_genome_id_new, bool_input_genomes_to_zero)
+			elif modus == 'replicates':
 				self._add_replicates(list_population, gauss_mu, gauss_sigma)
 			elif modus == 'timeseries_normal':
 				self._add_timeseries_gauss(list_population, gauss_mu, gauss_sigma)
