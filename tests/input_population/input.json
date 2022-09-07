@@ -1,5 +1,4 @@
 {
-	"simulation_directory": "/home/STUDENTI/ettore.rocchi/git_CAMISIM/input_population",
 	"seed": "42",
 	"max_processor": "8",
 	"output_directory": "out",
@@ -8,5 +7,5 @@
 	"fragm_size_std_dev": "27",
 	"number_of_samples": "1",
 	"equally_distributed_strains": "True",
-	"genomes_total": "10"
+	"genomes_total": "7"
 }
