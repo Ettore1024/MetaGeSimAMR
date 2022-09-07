@@ -175,8 +175,8 @@ class ConfigFileHandler(DefaultValues):
                 file_path_abundance_table=file_path_abundance_table,
                 ratio=self._config.get_value('ratio', community_section, is_digit=True, silent=True),
                 mode=mode,
-                equally_distributed_strains=self._config.get_value('equally_distributed_strains', community_section, is_boolean=True)
-                input_genomes_to_zero=self._config.get_value('input_genomes_to_zero', community_section, is_boolean=True)
+                equally_distributed_strains=self._config.get_value('equally_distributed_strains', community_section, is_boolean=True),
+                input_genomes_to_zero=self._config.get_value('input_genomes_to_zero', community_section, is_boolean=True),
                 log_mu=self._config.get_value('log_mu', community_section, is_digit=True, silent=True),
                 log_sigma=self._config.get_value('log_sigma', community_section, is_digit=True, silent=True),
                 gauss_mu=self._config.get_value('gauss_mu', community_section, is_digit=True, silent=True),

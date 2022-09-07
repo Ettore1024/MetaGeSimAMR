@@ -25,7 +25,7 @@ class Community(Validator):
     def __init__(
             self, identifier, genomes_total, genomes_real, limit_per_otu, file_path_metadata_table,
             file_path_genome_locations, file_path_gff_locations, file_path_abundance_table, ratio, mode,
-            equally_distributed_genomes, input_genomes_to_zero, log_mu, log_sigma, gauss_mu=None, gauss_sigma=None,
+            equally_distributed_strains, input_genomes_to_zero, log_mu, log_sigma, gauss_mu=None, gauss_sigma=None,
             logfile=None, verbose=True, debug=False):
         """
         Accumulation of all community related information
@@ -103,11 +103,11 @@ class Community(Validator):
         if not self.validate_characters(self.mode) or self.mode == '':
             return False
 
-        if not self.is_boolean_state(self.equally_distributed_strains):
-            return False
+        #if not self.is_boolean_state(self.equally_distributed_strains):
+            #return False
 
-        if not self.is_boolean_state(self.input_genomes_to_zero):
-            return False
+        #if not self.is_boolean_state(self.input_genomes_to_zero):
+            #return False
 
         if not self.validate_number(self.genomes_total, self.genomes_real):
             return False
