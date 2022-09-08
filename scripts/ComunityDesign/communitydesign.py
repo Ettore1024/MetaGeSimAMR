@@ -103,11 +103,11 @@ class Community(Validator):
         if not self.validate_characters(self.mode) or self.mode == '':
             return False
 
-        #if not self.is_boolean_state(self.equally_distributed_strains):
-            #return False
+        if not type(self.equally_distributed_strains) == bool:
+            return False
 
-        #if not self.is_boolean_state(self.input_genomes_to_zero):
-            #return False
+        if not type(self.input_genomes_to_zero) == bool:
+            return False
 
         if not self.validate_number(self.genomes_total, self.genomes_real):
             return False
