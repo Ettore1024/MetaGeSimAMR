@@ -1,5 +1,6 @@
 __author__ = "Ettore Rocchi"
 
+
 rule camisim_pipeline:
 	"""
 		This rule launch the CAMISIM simulation.
@@ -20,6 +21,8 @@ rule camisim_pipeline:
 		out = directory("{population}/out")		
 
 	conda: "camisim_env.yaml"
+
+	threads: 32
 	
 	shell:
 		"""
