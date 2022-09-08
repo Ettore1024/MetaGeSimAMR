@@ -2,9 +2,15 @@
 __pycache__/
 */__pycache__/
 
+#Ignore snakemake
+.snakemake/
+
 #Ignore generated CAMISIM's input files
 tests/input_population/abundance.tsv
 tests/input_population/config.ini
 tests/input_population/genome_to_id.tsv
 tests/input_population/genomes_info.json
 tests/input_population/metadata.tsv
+
+#Ignore CAMISIM's output directory
+tests/input_population/out/
