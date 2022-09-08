@@ -1,0 +1,12 @@
+name: camisim
+channels:
+  - bioconda
+  - anaconda
+  - conda-forge
+  - defaults
+dependencies:
+  - biom-format=2.1.*
+  - biopython=1.*
+  - matplotlib=3.*
+  - numpy=1.*
+  - python=3.9.*
