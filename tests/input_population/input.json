@@ -1,7 +1,6 @@
 {
 	"seed": "42",
 	"max_processor": "8",
-	"output_directory": "out",
 	"size": "0.1",
 	"fragm_size_mean": "270",
 	"fragm_size_std_dev": "27",

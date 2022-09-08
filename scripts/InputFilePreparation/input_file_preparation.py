@@ -1,6 +1,7 @@
 import csv
 import json
 import sys
+from pathlib import Path
 from configparser import ConfigParser
 
 def read_and_store_tsv_input (input_tsv_path):
@@ -142,14 +143,14 @@ def configuration_file_definition (configuration_file):
 	}
 
 
-def configuration_file_settings (configuration_file, dict_json, dict_of_columns, abundance_path, metadata_path, genome_to_id_path):
+def configuration_file_settings (configuration_file, dict_json, dict_of_columns, abundance_path, metadata_path, genome_to_id_path, simulation_directory):
 	"""
 		Comment here
 	"""
 
 	configuration_file.set('Main', 'max_processor', dict_json['max_processor'])
 	configuration_file.set('Main', 'seed', dict_json['seed'])
-	configuration_file.set('Main', 'output_directory', dict_json['output_directory'])
+	configuration_file.set('Main', 'output_directory', simulation_directory + '/out')
 	configuration_file.set('ReadSimulator', 'size', dict_json['size'])
 	configuration_file.set('ReadSimulator', 'fragments_size_mean', dict_json['fragm_size_mean'])
 	configuration_file.set('ReadSimulator', 'fragment_size_standard_deviation', dict_json['fragm_size_std_dev'])
@@ -221,7 +222,7 @@ def amr_pipeline (directory_of_simulation):
 
 	config = ConfigParser()
 	configuration_file_definition(config)
-	configuration_file_settings(config, dict_of_json, dict_of_tsv_columns, file_path_abundance, file_path_metadata, file_path_genome_to_id)
+	configuration_file_settings(config, dict_of_json, dict_of_tsv_columns, file_path_abundance, file_path_metadata, file_path_genome_to_id, directory_of_simulation)
 	file_path_config = directory_of_simulation + '/config.ini'
 	wrt_configuration_file(file_path_config, config)
 
@@ -237,4 +238,5 @@ if __name__ == "__main__":
 	except IndexError:
 		sys.exit()
 
-	amr_pipeline(working_dir)
+	working_dir_absolute_path = str(Path(working_dir).resolve())
+	amr_pipeline(working_dir_absolute_path)
