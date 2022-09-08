@@ -314,7 +314,7 @@ def wrt_genomes_info_file (genomes_info_path, dict_tsv_columns, input_tsv_path):
 	for index in range(len(dict_tsv_columns['genome_IDs'])):
 		for key in keys_list:
 			try:
-				del dict_from_tsv_info[dict_of_columns['genome_IDs'][index]][key]
+				del dict_from_tsv_info[dict_tsv_columns['genome_IDs'][index]][key]
 			except KeyError:
 				pass
 
