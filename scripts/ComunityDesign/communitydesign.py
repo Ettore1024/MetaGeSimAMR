@@ -546,6 +546,23 @@ class CommunityDesign(GenomePreparation):
 
         @return: Dictionary with drawn genome ids as key and file paths as value
         @rtype: tuple[dict[str|unicode, str|unicode]
+
+
+        ----------------------------------------------------------------------------
+        @author: Ettore Rocchi
+
+        The modified version of this function allows to set the parameter select_genomes_randomly, which
+        in turn, allows to choose the way in which the genomes are selected during the community design
+        step.
+
+        {See also the draw_strains function in strainselector.py}
+
+        What's new?
+                - Variables: There is one new variable defined within this function (select_genomes_randomly);
+                        - select_genomes_randomly: (bool) this variable is set to False if the known_distribution
+                                                   modality is considered, to True otherwise. This variable is then
+                                                   passed to the desing_community function. Its value will finally
+                                                   to the draw_strains function defined in strainselector.py
         """
         assert isinstance(list_of_communities, list)
         assert isinstance(list_of_file_paths_distribution, list)

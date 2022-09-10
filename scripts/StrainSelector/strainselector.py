@@ -242,6 +242,24 @@ class NoveltyCategory(object):
 
 		@return: List of drawn strain id
 		@rtype: list[str|unicode]
+
+
+		----------------------------------------------------------------
+		@author: Ettore Rocchi
+
+		The modified version of this function does NOT modify anything related to the four
+		original modalities of CAMISIM; it only affects the way in which the original genomes
+		are selected during the community design step.
+		In particular, if the known_distribution mode was chosen, this function would orderly
+		select the genomes to design the community. On the other hand, for the otheer four
+		modalities, this function will randomly select the genomes.
+
+		{See also the design_samples function defined in communitydesign.py}
+
+		What's new?
+			- Parameters: there is only one new parameter (select_random_genomes);
+				- select_random_genomes: (bool) it is set to False if the known_distribution
+							 modality is considered, otherwise it is set to True
 		"""
 		assert isinstance(total, int)
 		assert isinstance(limit_per_otu, int)

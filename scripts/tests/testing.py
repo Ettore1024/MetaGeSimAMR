@@ -69,7 +69,13 @@ def is_bool(string):
 
 def test_Broken_stick_model_distributes_abundance_properly_input_genome_to_zero():
 	"""
-		Comment here
+		This function tests if the sum of the relative abundances of the strain of a certain
+		genome equals the original genome's abundance, given in input. This allows to test
+		the correct functioning of the Broken stick model function when the abundance of the
+		original genome is required to be zero at the end (input_genomes_to_zero = True)
+
+		In order to avoid issues related to floating points and to approximations, the
+		math.isclose() method is used
 	"""
 
 	genome_ID = 'First_genome'
@@ -86,7 +92,14 @@ def test_Broken_stick_model_distributes_abundance_properly_input_genome_to_zero(
 
 def test_Broken_stick_model_distributes_abundance_properly():
 	"""
-		Comment here
+		This function tests if the sum between the relative abundances of the strain of a certain
+		genome and the relative abundance of that genome equals the original genome's abundance,
+		given in input. This allows to test the correct functioning of the Broken stick model
+		function when the abundance of the original genome is not required to be zero at the end
+		(input_genomes_to_zero = False)
+
+		In order to avoid issues related to floating points and to approximations, the
+		math.isclose() method is used
 	"""
 
 	genome_ID = 'First_genome'
@@ -103,7 +116,12 @@ def test_Broken_stick_model_distributes_abundance_properly():
 
 def test_abundances_input_equal_to_distributed_abundances():
 	"""
+		This function tests if the sum of the relative abundances given in input is equal
+		to the sum of the output relative abundances (once they were re-distributed among
+		the strains).
 
+		In order to avoid issues related to floating points and to approximations, the
+		math.isclose() method is used
 	"""
 
 	total_genomes_dict = {'E.coli': 0.5, 'S.aureus': 0.3, 'S.pneumoniae': 0.2, 'simulated_E.coli.Taxon001': 0, 'simulated_S.aureus.Taxon002': 0, 'simulated_S.pneumoniae.Taxon003': 0}
@@ -133,7 +151,9 @@ def test_abundances_input_equal_to_distributed_abundances():
 
 def test_genomes_total_greater_or_equal_to_input_genomes():
 	"""
-
+		This function tests if the number of input genomes is smaller than
+		(or equal to) the number of genomes required at the end of the simulation
+		(i.e number of input genomes + number of simulated strains)
 	"""
 
 	dict = read_and_store_tsv_input(tsv_path)
@@ -153,7 +173,8 @@ def test_genomes_total_greater_or_equal_to_input_genomes():
 
 def test_tsv_rows_have_same_number_of_elements():
 	"""
-
+		This function tests if the input.tsv file is properly written, with
+		each row having the expected number of elements
 	"""
 
 	dict_length = len(read_and_store_tsv_input(tsv_path))
@@ -165,7 +186,10 @@ def test_tsv_rows_have_same_number_of_elements():
 
 def test_all_configs_are_set():
 	"""
-
+		This function tests if the config.ini file's options are set.
+		The only parameter which may be empty is id_to_gff_file, since it
+		is not necessary, in the known_distribution modality, to provide
+		a gene annotation file
 	"""
 
 	config = ConfigParser()
@@ -184,7 +208,9 @@ def test_all_configs_are_set():
 
 def test_tsv_values_have_correct_types():
 	"""
-
+		This function tests if the input.tsv file is filled with values
+		of the expected type. The functions is_float and is_integer are
+		used to check this; they are defined at the beginning of the script
 	"""
 
 	tsv_dict = read_and_store_tsv_input(tsv_path)
@@ -209,7 +235,10 @@ def test_tsv_values_have_correct_types():
 
 def test_json_values_have_correct_types():
 	"""
-
+		This function tests if the input.json file's options are set to
+		value of the expected type. The functions is_float, is_integer and
+		is_bool are used to check this; they are defined at the beginning
+		of the script
 	"""
 
 	json_dict = read_and_store_json_input(json_path)
@@ -233,7 +262,9 @@ def test_json_values_have_correct_types():
 
 def test_Broken_stick_model_strain_zero():
 	"""
-
+		This function tests the Broken stick model function to ensure it returns
+		the original genome's abundance value when no strains for that genome is
+		feneerated by sgEvolver
 	"""
 
 	genome_ID = 'Second_genome'
@@ -251,7 +282,10 @@ def test_Broken_stick_model_strain_zero():
 
 def test_draw_strains_works_properly_for_new_modality():
 	"""
-
+		This function tests if the modified version of the drawn_strains functions
+		works properly in the new known_distribution modality; in this case we
+		expect the output of get_drawn_genome_id to be a list of ordered genomes, where
+		the other will reflect the order given in the input.tsv file
 	"""
 
 	dict_of_tsv_columns = read_and_store_tsv_input(tsv_path)
@@ -261,7 +295,10 @@ def test_draw_strains_works_properly_for_new_modality():
 	metadata_table.read(metadata_path, column_names=True)
 
 	strainselector_obj = StrainSelector()
-	drawn_strains_list = strainselector_obj.get_drawn_genome_id(metadata_table, 3, 1, False)
+	number_of_genomes = 3
+	limit_per_otu = 1
+	select_random_genomes = False
+	drawn_strains_list = strainselector_obj.get_drawn_genome_id(metadata_table, number_of_genomes, limit_per_otu, select_random_genomes)
 
 	metadata_file = pathlib.Path(metadata_path)
 	metadata_file.unlink()
