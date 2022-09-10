@@ -2,14 +2,9 @@ __author__ = "Ettore Rocchi"
 
 """
 	This script defines some functions which test if the functions
-	defined by Ettore Rocchi in input_file_preparation.py and in
-	populationdistribution.py work properly
+	defined in input_file_preparation.py and in populationdistribution.py
+	work properly
 """
-
-
-     #######################
-     #    Preliminaries    #
-     #######################
 
 import pytest
 import csv
@@ -19,7 +14,13 @@ import pathlib
 from configparser import ConfigParser
 from scripts.PopulationDistribution.populationdistribution import PopulationDistribution
 from scripts.InputFilePreparation.input_file_preparation import *
+from scripts.StrainSelector.strainselector import NoveltyCategory, StrainSelector
+from scripts.MetaDataTable.metadatatable import MetadataTable
 
+
+     #######################
+     #    Preliminaries    #
+     #######################
 
 tsv_path = "./input_population/input.tsv"
 json_path = "./input_population/input.json"
@@ -29,9 +30,12 @@ abundance_path = "./input_population/abundance.tsv"
 metadata_path = "./input_population/metadata.tsv"
 genome_to_id_path = "./input_population/genome_to_id.tsv"
 simulation_dir = "./input_population"
-
+genomes_info_path = "./input_population/genomes_info.json"
 
 def is_float(string):
+	"""
+		This function is used to check if a given string is a float or not
+	"""
 	try:
 		float(string)
 		return True
@@ -39,6 +43,9 @@ def is_float(string):
 		return False
 
 def is_integer(string):
+	"""
+		This function is used to test if a given string is an integer or not
+	"""
 	try:
 		int(string)
 		return True
@@ -46,6 +53,9 @@ def is_integer(string):
 		return False
 
 def is_bool(string):
+	"""
+		This function is used to test if a given string is a boolean or not
+	"""
 	try:
 		bool(string)
 		return True
@@ -92,16 +102,18 @@ def test_Broken_stick_model_distributes_abundance_properly():
 
 
 def test_abundances_input_equal_to_distributed_abundances():
+	"""
 
+	"""
 
-	total_genomes_dict = {'E.coli': 0.5, 'S.Aureus': 0.3, 'S.pneumoniae': 0.2, 'simulated_E.coli.Taxon001': 0, 'simulated_S.aureus.Taxon002': 0, 'simulated_S.pneumoniae.Taxon003': 0}
+	total_genomes_dict = {'E.coli': 0.5, 'S.aureus': 0.3, 'S.pneumoniae': 0.2, 'simulated_E.coli.Taxon001': 0, 'simulated_S.aureus.Taxon002': 0, 'simulated_S.pneumoniae.Taxon003': 0}
 	total_abundances_input = sum(total_genomes_dict[key] for key in total_genomes_dict)
 
 	np.random.seed(42)
 	number_of_samples = np.random.randint(1, 10)
 	population_list = [[0.0] * number_of_samples for _ in range(len(total_genomes_dict))]
 	list_of_genome_id = [key for key in total_genomes_dict]
-	input_genomes_to_zero = bool(np.random.randint(0, 1))
+	input_genomes_to_zero = bool(np.random.randint(0, 2))
 
 	dict_of_tsv_columns = read_and_store_tsv_input(tsv_path)
 	wrt_abundance_file(abundance_path, dict_of_tsv_columns)
@@ -120,6 +132,9 @@ def test_abundances_input_equal_to_distributed_abundances():
 
 
 def test_genomes_total_greater_or_equal_to_input_genomes():
+	"""
+
+	"""
 
 	dict = read_and_store_tsv_input(tsv_path)
 
@@ -137,6 +152,9 @@ def test_genomes_total_greater_or_equal_to_input_genomes():
 
 
 def test_tsv_rows_have_same_number_of_elements():
+	"""
+
+	"""
 
 	dict_length = len(read_and_store_tsv_input(tsv_path))
 
@@ -146,6 +164,9 @@ def test_tsv_rows_have_same_number_of_elements():
 
 
 def test_all_configs_are_set():
+	"""
+
+	"""
 
 	config = ConfigParser()
 	configuration_file_definition(config)
@@ -162,6 +183,9 @@ def test_all_configs_are_set():
 
 
 def test_tsv_values_have_correct_types():
+	"""
+
+	"""
 
 	tsv_dict = read_and_store_tsv_input(tsv_path)
 
@@ -184,6 +208,9 @@ def test_tsv_values_have_correct_types():
 
 
 def test_json_values_have_correct_types():
+	"""
+
+	"""
 
 	json_dict = read_and_store_json_input(json_path)
 
@@ -203,3 +230,131 @@ def test_json_values_have_correct_types():
 	assert is_integer(json_dict["genomes_total"])
 	assert int(json_dict["genomes_total"]) > 0
 
+
+def test_Broken_stick_model_strain_zero():
+	"""
+
+	"""
+
+	genome_ID = 'Second_genome'
+	total_genomes_dict = {'First_genome': 0.7, 'Second_genome': 0.3, 'simulated_First_genome.Taxon001': 0, 'simulated_First_genome.Taxon002': 0}
+	original_genome_abundance = total_genomes_dict[genome_ID]
+	number_strains = 0
+	original_dict = total_genomes_dict.copy()
+
+	np.random.seed(42)
+	input_genomes_to_zero = bool(np.random.randint(0, 2))
+	dict = PopulationDistribution.Broken_stick_model(genome_ID, total_genomes_dict, original_genome_abundance, number_strains, input_genomes_to_zero)
+
+	assert dict['Second_genome'] == original_dict['Second_genome']
+
+
+def test_draw_strains_works_properly_for_new_modality():
+	"""
+
+	"""
+
+	dict_of_tsv_columns = read_and_store_tsv_input(tsv_path)
+	wrt_metadata_file(metadata_path, dict_of_tsv_columns)
+
+	metadata_table = MetadataTable()
+	metadata_table.read(metadata_path, column_names=True)
+
+	strainselector_obj = StrainSelector()
+	drawn_strains_list = strainselector_obj.get_drawn_genome_id(metadata_table, 3, 1, False)
+
+	metadata_file = pathlib.Path(metadata_path)
+	metadata_file.unlink()
+
+	assert len(drawn_strains_list) == len(dict_of_tsv_columns['genome_IDs'])
+	assert drawn_strains_list[0] == dict_of_tsv_columns['genome_IDs'][0]
+	assert drawn_strains_list[1] == dict_of_tsv_columns['genome_IDs'][1]
+	assert drawn_strains_list[2] == dict_of_tsv_columns['genome_IDs'][2]
+
+
+def test_abundance_file_rows():
+	"""
+		This function tests if the abundance.tsv file has the expected number
+		of rows (genomes), and the correct amount of columns (i.e. 2, one for
+		the genome ID, one for the relative abundance)
+	"""
+
+	dict_of_tsv_columns = read_and_store_tsv_input(tsv_path)
+	wrt_abundance_file(abundance_path, dict_of_tsv_columns)
+
+	rows_num = 0
+	with open (abundance_path, 'r') as abundance:
+		for row in csv.reader(abundance, delimiter = '\t'):
+			assert len(row) == 2
+			rows_num += 1
+		assert rows_num == len(dict_of_tsv_columns['genome_IDs'])
+		assert rows_num == len(dict_of_tsv_columns['abundances'])
+
+	abundance_file = pathlib.Path(abundance_path)
+	abundance_file.unlink()
+
+
+def test_metatada_file_rows():
+	"""
+		This function tests if the metadata.tsv file has the expected number
+		of rows (number of genomes + 1), and the correct amount of columns
+		(i.e. 4, one for the genome ID, one for the OTU, one for the NCBI ID,
+		one for the novelty category)
+	"""
+
+	dict_of_tsv_columns = read_and_store_tsv_input(tsv_path)
+	wrt_metadata_file(metadata_path, dict_of_tsv_columns)
+
+	rows_num = 0
+	with open (metadata_path, 'r') as metadata:
+		for row in csv.reader(metadata, delimiter = '\t'):
+			assert len(row) == 4
+			rows_num += 1
+		assert rows_num == len(dict_of_tsv_columns['genome_IDs']) + 1
+		assert rows_num == len(dict_of_tsv_columns['patric_IDs']) + 1
+		assert rows_num == len(dict_of_tsv_columns['novelty_cats']) + 1
+
+	metadata_file = pathlib.Path(metadata_path)
+	metadata_file.unlink()
+
+
+def test_genome_to_id_file_rows():
+	"""
+		This function tests if the genome_to_id.tsv file has the expected number
+		of rows (genomes), and the correct amount of columns (i.e. 2, one for the
+		genome ID, one for the genome's file name)
+	"""
+
+	dict_of_tsv_columns = read_and_store_tsv_input(tsv_path)
+	wrt_genome_to_id_file(genome_to_id_path, dict_of_tsv_columns, simulation_dir)
+
+	rows_num = 0
+	with open (genome_to_id_path, 'r') as genome_to_id:
+		for row in csv.reader(genome_to_id, delimiter = '\t'):
+			assert len(row) == 2
+			rows_num += 1
+		assert rows_num == len(dict_of_tsv_columns['genome_IDs'])
+		assert rows_num == len(dict_of_tsv_columns['genome_filenames'])
+
+	genome_to_id_file = pathlib.Path(genome_to_id_path)
+	genome_to_id_file.unlink()
+
+
+def test_genomes_info_file_keys():
+	"""
+		This function tests if the genomes_info.json file has the expected number
+		of genomes, and each genome has the expected numbers of keys
+	"""
+
+	dict_of_tsv_columns = read_and_store_tsv_input(tsv_path)
+	wrt_genomes_info_file(genomes_info_path, dict_of_tsv_columns, tsv_path)
+
+	with open (genomes_info_path, 'r') as genomes_info:
+		genomes_info_to_dict = json.load(genomes_info)
+
+	assert len(genomes_info_to_dict) == len(dict_of_tsv_columns['genome_IDs'])
+	for key in genomes_info_to_dict:
+		assert len(genomes_info_to_dict[key]) == 7
+
+	genomes_info_file = pathlib.Path(genomes_info_path)
+	genomes_info_file.unlink()
