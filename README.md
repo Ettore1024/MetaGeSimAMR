@@ -38,10 +38,11 @@ The following sections will be about the new **known distribution** modality, to
 
 ## How to use the tool
 The **MetaGeSim-AMR** tool allows to generate metagenomic synthetic data only starting from two input files (_input.tsv_ and _input.json_).
-In order to this, the **Snakemake pipeline** must be used.
+In order to this, the **Snakemake pipeline** must be used (see [here](https://github.com/Ettore1024/MetaGeSim-AMR#snakemake-pipeline)).
 
 On the other hand, the new modality of CAMISIM (**known distribution**) may be used also outside the Snakemake pipeline, but, in that case, an extra input file
-and three new parameters in the configuration file are required. 
+(described [here](https://github.com/Ettore1024/MetaGeSim-AMR#the-new-file-of-abundances)) and three new parameters in the configuration file 
+(described [here](https://github.com/Ettore1024/MetaGeSim-AMR#the-new-configuration-file-parameters)) are required. 
 
 An in-depth description is proposed in the following sections.
 
@@ -74,7 +75,7 @@ Thus, the **known distribution** modality proposes a way to combine these two di
 ## Other minor differences from the original CAMISIM tool
 
 # References
-[1] Fritz, A. Hofmann, P. et al. (2019). **CAMISIM: Simulating metagenomes and microbial communities.**, _Microbiome_, 2019, 7:17, doi: [10.1186/s40168-019-0633-6](https://doi.org/10.1186/s40168-019-0633-6), github: [CAMI-challenge/CAMISIM](https://github.com/CAMI-challenge/CAMISIM)
+[1] Fritz, A. Hofmann, P. et al, **CAMISIM: Simulating metagenomes and microbial communities**, _Microbiome_, 2019, 7:17, doi: [10.1186/s40168-019-0633-6](https://doi.org/10.1186/s40168-019-0633-6), github: [CAMI-challenge/CAMISIM](https://github.com/CAMI-challenge/CAMISIM)
 
 [2] _National Center for Biotechnology Information_, **NCBI** [www.ncbi.nlm.nih.gov](https://www.ncbi.nlm.nih.gov/)
 
