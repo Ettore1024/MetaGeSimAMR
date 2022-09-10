@@ -45,7 +45,7 @@ and three new parameters in the configuration file are required.
 
 An in-depth description is proposed in the following sections.
 
-### The aim of the known distribution modality
+### The aim of the known distribution modality:
 The **known distribution** modality is a solution to the lack of a metagenomic simulation involving an _a priori_ known distribution of the microbial population, **when** it is 
 also useful to simulate (synthetic) strains.
 
@@ -55,13 +55,13 @@ tool called sgEvolver), but the population distribution is randomly generated st
 
 Thus, the **known distribution** modality proposes a way to combine these two different approaches.
 
-### The new file of abundances
+### The new file of abundances:
 
-### The new configuration file parameters
+### The new configuration file parameters:
 
-### Snakemake pipeline
+### Snakemake pipeline:
 
-### The input_file_preparation_script
+### The input_file_preparation script:
 
 ## Testing
 
@@ -75,6 +75,11 @@ Thus, the **known distribution** modality proposes a way to combine these two di
 
 # References
 [1] Fritz, A. Hofmann, P. et al. (2019). **CAMISIM: Simulating metagenomes and microbial communities.**, _Microbiome_, 2019, 7:17, doi: [10.1186/s40168-019-0633-6](https://doi.org/10.1186/s40168-019-0633-6), github: [CAMI-challenge/CAMISIM](https://github.com/CAMI-challenge/CAMISIM)
+
 [2] _National Center for Biotechnology Information_, **NCBI** [www.ncbi.nlm.nih.gov](https://www.ncbi.nlm.nih.gov/)
+
 [3] _Pathosystems Resource Integration Center_, **PATRIC** [patricbrc.org](https://patricbrc.org/) 
+
 [4] _Bacterial and Viral Bioinformatics Resource Center_,  **BV-BRC** [bv-brc.org](https://www.bv-brc.org/)
+
+
