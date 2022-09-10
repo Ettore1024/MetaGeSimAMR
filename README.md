@@ -8,7 +8,7 @@ What this new modality does differently is the community design step, which, in 
 from a log-normal distribution (that is what happens in the four original modalities of CAMISIM).
 
 Once the new strains are generated, this new modality will distribute the relative abundances of each "original" genome to all its simulated strains. An example of this process 
-can be found in the [here](https://github.com/Ettore1024/Metagenomic_known_distribution/#Redistribution-of-abundances).
+can be found in the [here](https://github.com/Ettore1024/MetaGeSim-AMR#redistribution-of-abundances).
 
 In this repository you can find the new version of the CAMISIM tool, in which the above-described extra modality in the _de novo_ mode is implemented. A Snakefile is presented, too;
 it allows to define a simple pipeline which was used for Antimicrobial Resistance (AMR) studies, for the synthetic data generation step.
@@ -43,7 +43,14 @@ The following sections will be about the new **known distribution** modality, to
 
 ### The new configuration file parameters
 
+## Testing
+
+# Additional clarifications
+
 ## Redistribution of abundances
 
+## Example of configuration file
+
 ## Other minor differences from the original CAMISIM tool
- 
+
+# References
