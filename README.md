@@ -10,7 +10,7 @@ What this new modality does differently is the community design step, which, in 
 from a log-normal distribution (that is what happens in the four original modalities of CAMISIM).
 
 Once the new strains are generated, this new modality will distribute the relative abundances of each "original" genome to all its simulated strains. An example of this process 
-can be found in the [here](https://github.com/Ettore1024/MetaGeSim-AMR#redistribution-of-abundances).
+can be found [here](https://github.com/Ettore1024/MetaGeSim-AMR#redistribution-of-abundances).
 
 In this repository you can find the new version of the CAMISIM tool, in which the above-described extra modality in the _de novo_ mode is implemented. A **Snakefile** is presented, too;
 it allows to define a simple pipeline which was used for Antimicrobial Resistance (AMR) studies, for the synthetic data generation step.
@@ -27,7 +27,7 @@ In this way, both the new version of CAMISIM and the Snakemake pipeline, which c
 ## Dependencies
 In order to properly work, the **MetaGeSim-AMR** tool needs some dependencies to be installed. The list of dependencies for CAMISIM can be found [here](https://github.com/CAMI-challenge/CAMISIM/wiki/User-manual#dependencies).  
 To be more precise, the conda-installable dependencies ([BIOM](https://pypi.org/project/biom-format/), [Biopython](https://biopython.org/), 
-[Numpy](https://numpy.org/), [Matplotlib](https://matplotlib.org/)) are not required to be manually installed by the user when working with the **Snakemake pipeline**, since a
+[Numpy](https://numpy.org/), [Matplotlib](https://matplotlib.org/)) are not required to be manually installed by the user when working with the Snakemake pipeline, since a
 conda environment is internally set up when launching the pipeline; the characteristics of the environment can be found in [camisim_env.yaml](https://github.com/Ettore1024/MetaGeSim-AMR/blob/main/camisim_env.yaml).
 
 All the other dependencies ([Perl 5](https://www.perl.org/), [wgsim](https://github.com/lh3/wgsim), [NanoSim](https://github.com/abremges/NanoSim), 
@@ -36,35 +36,35 @@ All the other dependencies ([Perl 5](https://www.perl.org/), [wgsim](https://git
 # Documentation
 A complete documentation for the original CAMISIM tool can be found [here](https://github.com/CAMI-challenge/CAMISIM/wiki/User-manual).
 
-The following sections will be about the new **known distribution** modality, together with its features and options, and the **Snakemake pipeline**.
+The following sections will be about the new _known distribution_ modality, together with its features and options, and the Snakemake pipeline.
 
 ## How to use the tool
-The **MetaGeSim-AMR** tool allows to generate metagenomic synthetic data only starting from two input files (_input.tsv_ and _input.json_).
-In order to this, the **Snakemake pipeline** must be used (see [here](https://github.com/Ettore1024/MetaGeSim-AMR#snakemake-pipeline)).
+The **MetaGeSim-AMR** tool allows to generate metagenomic synthetic data only starting from two input files (`input.tsv` and `input.json`).
+In order to this, the Snakemake pipeline must be used (see [here](https://github.com/Ettore1024/MetaGeSim-AMR#snakemake-pipeline) for further details).
 
-On the other hand, the new modality of CAMISIM (**known distribution**) may be used also outside the **Snakemake pipeline**, but, in that case, an extra input file
+On the other hand, the new modality of CAMISIM (_known distribution_) may be used also outside the Snakemake pipeline, but in that case an extra input file
 (described [here](https://github.com/Ettore1024/MetaGeSim-AMR#the-new-file-of-abundances)) and three new parameters in the configuration file 
 (described [here](https://github.com/Ettore1024/MetaGeSim-AMR#the-new-configuration-file-parameters)) are required. 
 
 An in-depth description is proposed in the following sections.
 
 ### The aim of the known distribution modality:
-The **known distribution** modality is a solution to the lack of a metagenomic simulation involving an _a priori_ known distribution of the microbial population, _when_ it is 
-also useful to simulate (synthetic) strains.
+The _known distribution_ modality is a solution to the lack of a metagenomic simulation framework when having both the _a priori_ known distribution of the microbial population, and the need of 
+simulating (synthetic) strains.
 
 It is worth pointing out that the original version of CAMISIM may work in two different modes, the so-called _from profile_ and _de novo_. In the _from profile_ mode, the user gives in input a file 
 with the population distribution, but no strain is generated during the simulation; on the other hand, the _de novo_ mode is based on the creation of new strains (through a
 tool called [sgEvolver](https://darlinglab.org/mauve/developer-guide/benchmarking.html)), but the population distribution is randomly generated starting from a log-normal distribution 
 (further details may be found [here](https://github.com/CAMI-challenge/CAMISIM/wiki/Distribution-of-genomes)).
 
-Thus, the **known distribution** modality proposes a way to combine these two different approaches.
+Thus, the _known distribution_ modality proposes a way to combine these two different approaches.
 
-The **known distribution** modality is a (sub-)mode of the _de novo_ one. The idea behind it is just to change the way in which the population distribution is generated. 
+The known distribution_ modality is a (sub-)mode of the _de novo_ one. The idea behind it is just to change the way in which the population distribution is generated. 
 The four original modality of CAMISIM in the _de novo_ mode are _differential_, _replicates_, _timeseries normal_, and _timeseries lognormal_. 
 It is worth mentioning that they are all based on the log-normal distribution and they only affect the simulation of the population distribution for different samples.
 This means that the user can not see the difference among those four modalities only looking to the results of the distribution of one sample (as described [here](https://github.com/CAMI-challenge/CAMISIM/wiki/Distribution-of-genomes)).
 
-On the other hand, the **known distribution** modality works differently, since the simulation of the population distribution does not start with a sampling from the log-normal distribution; instead, 
+On the other hand, the _known distribution_ modality works differently, since the simulation of the population distribution does not start with a sampling from the log-normal distribution; instead, 
 it starts from the given relative abundances of the input genomes and then manipulates them through the **broken stick model**.
 
 The idea behind the broken stick model is to divide the given input abundance of each genome, among its generated strains. This distribution of the original abundance among strains is 
@@ -74,50 +74,57 @@ As already said, in order to work with this new modality CAMISIM needs a new inp
 
 ### The new file of abundances:
 The new input file must be a _tsv_ file with no header and two columns: the first one with the _genome_ID_ used in the other input files required by CAMISIM 
-(_metadata.tsv_ and _genome_to_id.tsv_); the second one with the relative abundance of each original genome.
+(`metadata.tsv` and `genome_to_id.tsv`); the second one with the relative abundance of each original genome.
 
-The configuration file's parameter _num_real_genomes_ must of course be set to a number equal to or smaller than the number of genomes that are available in input.
-In the second case, the _abundance.tsv_ file can be filled in two different ways:
+The configuration file's parameter `num_real_genomes` must of course be set to a number equal to or smaller than the number of genomes that are available in input.
+In the second case, the `abundance.tsv` file can be filled in two different ways:
 
   1. The user can only list the genomes of interest, with their relative abundance, omitting all the other genomes;
 
-  2. The user can list all the genomes given in input (inside the `genomes/` folder, I will come back later on this point); in this case, all the genomes the user do not want to use 
+  2. The user can list all the genomes given in input (whose genome's file is inside the `genomes/` folder, I will come back later on this point); in this case, all the genomes the user do not want to use 
 during the simulation must be put at the bottom of the list and their relative abundance should be set to 0.
 
 A clarification on point 2 should be highlighted: if the sum of the abundances of the considered genomes does not equal 1, the simulation will not stop and 
-no error will emerge. This is consistent with the original _de novo_ modality: the relative abundances of each genome and each strain is always re-normalised so that their sum will be euqal to 1.
-As a result, if the abundances given in input are not normalised to 1, the ouput ones will; thus, the relative proportions among genomes will be preserved.
+no error will emerge. This is consistent with the original _de novo_ modality: the relative abundances of each genome and each strain is always re-normalised so that their sum will be equal to 1.
+As a result, also in the case in which the abundances given in input are not normalised to 1, the ouput ones will; in this way, the relative proportions among genomes will be preserved.
 
-Once the _abundance.tsv_ file is created, a new parameter must be considered in the configuration file, so that CAMISIM will access the file. This new parameter (as well as the other two related to the
+Once the `abundance.tsv` file is created, a new parameter must be considered in the configuration file, so that CAMISIM will access the file. This new parameter (as well as other two, related to the
 mathematical simulation) will be described in the next section.
  
 ### The new configuration file parameters:
-The new version of the configuration file differs from the original one because of the presence of three new parameters: _path_to_abundance_file_, _equally_distributed_strains_, and _input_genomes_to_zero_.
+The new version of the configuration file differs from the original one because of the presence of three new parameters: `path_to_abundance_file`, `equally_distributed_strains`, and `input_genomes_to_zero`.
 Let's see their definitions:
 
-  - `_path_to_abundance_file_` should be set equal to the absolute path of the above-mentioned _abundance.tsv_ file;
+  - `path_to_abundance_file` should be set equal to the absolute path of the above-mentioned `abundance.tsv` file;
 
-  - `_equally_distributed_strains_` is a boolean parameter that allows to decide if the number of simulated strains is equally distributed among the starting genomes.
-This means that at the end all the considered input genomes will have the same amount of simulated strains. If, for instance, 3 genomes are given in input and the required final amount of genomes is set to 15,
-12 strains will be generated, 4 from each of the 3 original genomes (if `_equally_distributed_strains_ = True`);
+  - `equally_distributed_strains` is a boolean parameter that allows to decide if the number of simulated strains is equally distributed among the starting genomes.
+This means that, at the end, all the considered input genomes will have the same amount of simulated strains. If, for instance, 3 genomes are given in input and the required final amount of genomes is set to 15,
+12 strains will be generated, 4 from each of the 3 original genomes (if `equally_distributed_strains = True`);
 
-  - `_input_genomes_to_zero_` is a boolean parameter used inside the function implementing the broken stick model. It is used to decide if the relative abundances of the input genomes will be totally re-distributed
-among their strains (`_input_genomes_to_zero_ = True`) or not (`_input_genomes_to_zero_ = False`). 
+  - `input_genomes_to_zero` is a boolean parameter used inside the function implementing the broken stick model. It is used to decide if the relative abundances of the input genomes will be totally re-distributed
+among their strains (`input_genomes_to_zero = True`) or not (`input_genomes_to_zero = False`). 
 
-Outside the **known distribution** modality, the _abundance.tsv_ file is not required, hence the user can just leave the associated parameter blank.
+Outside the _known distribution_ modality, the `abundance.tsv` file is not required, hence the user can just leave the associated parameter blank.
 
-On the other hand, _equally_distributed_strains_ and _input_genomes_to_zero_ can not be left empty, in line with the other parameters of the same section ([community_i_], where _i_ is an integer identifying
+On the other hand, `equally_distributed_strains` and `input_genomes_to_zero` can not be left empty, in line with the other parameters of the same section (`[communityk]`, where `k` is an integer identifying
 the community) of the configuration file.
 
-It is worth pointing out that _equally_distributed_strains_ affects not only the **known distribution** modality but also the original ones.
+It is worth pointing out that `equally_distributed_strains` affects not only the _known distribution_ modality but also the original ones.
 
 An example of the configuration file may be found [here](https://github.com/Ettore1024/MetaGeSim-AMR#example-of-configuration-file)
 
 ### Snakemake pipeline:
+In last sections, the new _known distribution_ modality was described. The **MetaGeSim-AMR** tool is composed also of a basic Snakemake pipeline, whose aim is to connect the _known distribution_ modality to
+another script ([input_file_preparation.py](https://github.com/Ettore1024/MetaGeSim-AMR/blob/main/scripts/InputFilePreparation/input_file_preparation.py)) which allows the user to speed and 
+simplify the input file preparation for the above-mentioned modality.
 
-### The input_file_preparation script:
+Moreover, further input information associated to the studied genomes is required, such as its genome length or its resistance or susceptability for a given antibiotic. All these information will
+be collected in an output file (`genomes_info.json`), which in turn will be used for AMR studies (but this does not concern the **MetaGeSim-AMR** tool).
 
 ## Testing
+The new functions defined in the scripts `input_file_preparation.py`, `populationdistribution.py`, and `strainselector.py` have been tested through `pytest`. The file containing the test functions
+([testing.py](https://github.com/Ettore1024/MetaGeSim-AMR/blob/main/scripts/tests/testing.py)) can be found in the `scripts/tests/` folder. In the same folder, all the files related to the input 
+population used for testing are collected inside `input_population/`. There, the `genomes/` folder containing three _fasta_ files as well as the `input.json` and `input.tsv` files may be found.
 
 ## Additional clarifications
 
@@ -126,6 +133,12 @@ An example of the configuration file may be found [here](https://github.com/Etto
 ### Example of configuration file:
 
 # What's new in the scripts
+Here, the list of new functions and modified functions.
+
+```python
+def something():
+
+```
 
 # References
 [1] Fritz, A. Hofmann, P. et al, **CAMISIM: Simulating metagenomes and microbial communities**, _Microbiome_, 2019, 7:17, doi: [10.1186/s40168-019-0633-6](https://doi.org/10.1186/s40168-019-0633-6), github: [CAMI-challenge/CAMISIM](https://github.com/CAMI-challenge/CAMISIM)
