@@ -1,6 +1,6 @@
 # CAMISIM (new) 'known distribution' modality
 
-https://img.shields.io/badge/<Python>-<v3.9>-<informational>
+https://img.shields.io/badge/Python-v3.9-informational
 
 ## Why this new modality
 The modality called **known distribution** is built starting from the _de novo_ mode of [CAMISIM](https://github.com/CAMI-challenge/CAMISIM).
