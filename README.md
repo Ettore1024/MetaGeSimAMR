@@ -111,15 +111,35 @@ the community) of the configuration file.
 
 It is worth pointing out that `equally_distributed_strains` affects not only the _known distribution_ modality but also the original ones.
 
-An example of the configuration file may be found [here](https://github.com/Ettore1024/MetaGeSim-AMR#example-of-configuration-file)
+An example of the configuration file may be found [here](https://github.com/Ettore1024/MetaGeSim-AMR#example-of-configuration-file).
 
 ### Snakemake pipeline:
 In last sections, the new _known distribution_ modality was described. The **MetaGeSim-AMR** tool is composed also of a basic Snakemake pipeline, whose aim is to connect the _known distribution_ modality to
 another script ([input_file_preparation.py](https://github.com/Ettore1024/MetaGeSim-AMR/blob/main/scripts/InputFilePreparation/input_file_preparation.py)) which allows the user to speed and 
-simplify the input file preparation for the above-mentioned modality.
+simplify the input file preparation for the above-mentioned modality. This script takes two input files ([input.tsv](https://github.com/Ettore1024/MetaGeSim-AMR/blob/main/scripts/tests/input_population/input.tsv)
+and [input.json](https://github.com/Ettore1024/MetaGeSim-AMR/blob/main/scripts/tests/input_population/input.json)) containing all the information needed to build not only the above-defined `abundace.tsv`, but
+also the `metadata.tsv`, `genome_to_id.tsv`, and `config.ini` files (see [here](https://github.com/CAMI-challenge/CAMISIM/wiki/File-Formats) for more details on such files).
 
-Moreover, further input information associated to the studied genomes is required, such as its genome length or its resistance or susceptability for a given antibiotic. All these information will
-be collected in an output file (`genomes_info.json`), which in turn will be used for AMR studies (but this does not concern the **MetaGeSim-AMR** tool).
+Moreover, further input information associated to the studied genomes, such as its genome length or its resistance or susceptability for a given antibiotic, is required, not by CAMISIM, but by the
+`input_file_preparation.py` script. In fact, all these information will be collected in an output file (`genomes_info.json`), which in turn will be used for AMR studies 
+(but this does not concern the **MetaGeSim-AMR** tool). All these additional data are collected in the `input.tsv` file; instead, the `input.json` file gathers eight parameters of the configuration file.
+
+The Snakemake pipeline is composed of two rules (defined in the [Snakefile](https://github.com/Ettore1024/MetaGeSim-AMR/blob/main/Snakefile)): one calling the metagenomic simulation performed by 
+CAMISIM (in the _known distribution_ modality), one calling the `input_file_preparation.py` script, if the CAMISIM configuration file does not exist.
+
+Hence, to use the Snakemake pipeline, and so the entire **MetaGeSim-AMR** tool, the following command should be used:
+
+    snakemake path_to_population/.../out --use-conda
+
+where `out/` is the direcory of the CAMISIM output the user wants to create, while `path_to_population/` is the path to the folder containing the two input files.
+
+In case the user only wants to use the CAMISIM part (with its input files already written), he can choose to use the command above (where only the rule `camisim` will be called) or the following one:
+
+    python metagenomesimulation.py path_to_config/.../config.ini 
+
+but, of course, also in this case the previously mentioned requirements and dependencies must be satisfied.
+
+Notice that only in the **MetaGeSim-AMR** tool the CAMISIM input files' names need to be standardised to `abundace.tsv`, `metadata.tsv`, `genome_to_id.tsv`, and `config.ini`, for the sake of simplicity. 
 
 ## Testing
 The new functions defined in the scripts `input_file_preparation.py`, `populationdistribution.py`, and `strainselector.py` have been tested through `pytest`. The file containing the test functions
