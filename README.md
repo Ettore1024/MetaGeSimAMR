@@ -1,6 +1,6 @@
 # CAMISIM (new) 'known distribution' modality
 
-https://img.shields.io/badge/Python-v3.9-informational
+[![Python](https://img.shields.io/badge/Python-v3.9-informational)](https://img.shields.io/badge/Python-v3.9-informational)
 
 ## Why this new modality
 The modality called **known distribution** is built starting from the _de novo_ mode of [CAMISIM](https://github.com/CAMI-challenge/CAMISIM).
@@ -81,7 +81,7 @@ In the second case, the _abundance.tsv_ file can be filled in two different ways
 
   1. The user can only list the genomes of interest, with their relative abundance, omitting all the other genomes;
 
-  2. The user can list all the genomes given in input (inside the `genomes` folder, I will come back later on this point); in this case, all the genomes the user do not want to use 
+  2. The user can list all the genomes given in input (inside the `genomes/` folder, I will come back later on this point); in this case, all the genomes the user do not want to use 
 during the simulation must be put at the bottom of the list and their relative abundance should be set to 0.
 
 A clarification on point 2 should be highlighted: if the sum of the abundances of the considered genomes does not equal 1, the simulation will not stop and 
@@ -92,6 +92,26 @@ Once the _abundance.tsv_ file is created, a new parameter must be considered in 
 mathematical simulation) will be described in the next section.
  
 ### The new configuration file parameters:
+The new version of the configuration file differs from the original one because of the presence of three new parameters: _path_to_abundance_file_, _equally_distributed_strains_, and _input_genomes_to_zero_.
+Let's see their definitions:
+
+  - `_path_to_abundance_file_` should be set equal to the absolute path of the above-mentioned _abundance.tsv_ file;
+
+  - `_equally_distributed_strains_` is a boolean parameter that allows to decide if the number of simulated strains is equally distributed among the starting genomes.
+This means that at the end all the considered input genomes will have the same amount of simulated strains. If, for instance, 3 genomes are given in input and the required final amount of genomes is set to 15,
+12 strains will be generated, 4 from each of the 3 original genomes (if `_equally_distributed_strains_ = True`);
+
+  - `_input_genomes_to_zero_` is a boolean parameter used inside the function implementing the broken stick model. It is used to decide if the relative abundances of the input genomes will be totally re-distributed
+among their strains (`_input_genomes_to_zero_ = True`) or not (`_input_genomes_to_zero_ = False`). 
+
+Outside the **known distribution** modality, the _abundance.tsv_ file is not required, hence the user can just leave the associated parameter blank.
+
+On the other hand, _equally_distributed_strains_ and _input_genomes_to_zero_ can not be left empty, in line with the other parameters of the same section ([community_i_], where _i_ is an integer identifying
+the community) of the configuration file.
+
+It is worth pointing out that _equally_distributed_strains_ affects not only the **known distribution** modality but also the original ones.
+
+An example of the configuration file may be found [here](https://github.com/Ettore1024/MetaGeSim-AMR#example-of-configuration-file)
 
 ### Snakemake pipeline:
 
@@ -110,10 +130,8 @@ mathematical simulation) will be described in the next section.
 # References
 [1] Fritz, A. Hofmann, P. et al, **CAMISIM: Simulating metagenomes and microbial communities**, _Microbiome_, 2019, 7:17, doi: [10.1186/s40168-019-0633-6](https://doi.org/10.1186/s40168-019-0633-6), github: [CAMI-challenge/CAMISIM](https://github.com/CAMI-challenge/CAMISIM)
 
-[2] _National Center for Biotechnology Information_, **NCBI** [www.ncbi.nlm.nih.gov](https://www.ncbi.nlm.nih.gov/)
+[2] _National Center for Biotechnology Information_, **NCBI**, site: [www.ncbi.nlm.nih.gov](https://www.ncbi.nlm.nih.gov/)
 
-[3] _Pathosystems Resource Integration Center_, **PATRIC** [patricbrc.org](https://patricbrc.org/) 
+[3] _Pathosystems Resource Integration Center_, **PATRIC**, site: [patricbrc.org](https://patricbrc.org/) 
 
-[4] _Bacterial and Viral Bioinformatics Resource Center_,  **BV-BRC** [bv-brc.org](https://www.bv-brc.org/)
-
-
+[4] _Bacterial and Viral Bioinformatics Resource Center_, **BV-BRC**, site: [bv-brc.org](https://www.bv-brc.org/)
