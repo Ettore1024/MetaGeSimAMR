@@ -1,10 +1,10 @@
-__author__ = "Ettore Rocchi"
-
 """
 	This script defines some functions which test if the functions
 	defined in input_file_preparation.py and in populationdistribution.py
 	work properly
 """
+
+__author__ = "Ettore Rocchi"
 
 import pytest
 import csv
