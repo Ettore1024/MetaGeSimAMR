@@ -207,9 +207,9 @@ anonymous = True
 compress = 1
 
 [ReadSimulator]
-readsim = CAMISIM/tools/art_illumina-2.3.6/art_illumina
-error_profiles = CAMISIM/tools/art_illumina-2.3.6/profiles
-samtools = CAMISIM/tools/samtools-1.3/samtools
+readsim = MetaGeSim-AMR/tools/art_illumina-2.3.6/art_illumina
+error_profiles = MetaGeSim-AMR/tools/art_illumina-2.3.6/profiles
+samtools = MetaGeSim-AMR/tools/samtools-1.3/samtools
 profile = mbarc
 size = 0.1
 type = art
@@ -217,8 +217,8 @@ fragments_size_mean = 270
 fragment_size_standard_deviation = 27
 
 [CommunityDesign]
-ncbi_taxdump = CAMISIM/tools/ncbi-taxonomy_20170222.tar.gz
-strain_simulation_template = CAMISIM/scripts/StrainSimulationWrapper/sgEvolver/simulation_dir
+ncbi_taxdump = MetaGeSim-AMR/tools/ncbi-taxonomy_20170222.tar.gz
+strain_simulation_template = MetaGeSim-AMR/scripts/StrainSimulationWrapper/sgEvolver/simulation_dir
 number_of_samples = 3
 
 [community0]
