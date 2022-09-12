@@ -137,7 +137,7 @@ where `out/` is the directory of the CAMISIM output the user wants to create, wh
 
 To check if the **MetaGeSim-AMR** tool works properly, a test run can be launched with the following command:
 
-   snakemake scripts/tests/input_population/out --use-conda
+    snakemake scripts/tests/input_population/out --use-conda
 
 In case the user only wants to use the CAMISIM part (with its input files already written), he/she can choose to use the command above (where only the rule `camisim` will be called) or the following one:
 
