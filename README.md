@@ -147,18 +147,138 @@ The new functions defined in the scripts `input_file_preparation.py`, `populatio
 population used for testing are collected inside `input_population/`. There, the `genomes/` folder containing three _fasta_ files as well as the `input.json` and `input.tsv` files may be found.
 
 ## Additional clarifications
+Following, two sections intends to clarify two important aspects of the _known distribution_ modality: the way abundances are distributed aong strains and the correct way to write the configuration file.
 
 ### Redistribution of abundances:
-
-### Example of configuration file:
-
-# What's new in the scripts
-Here, the list of new functions and modified functions.
-
-```python
-def something():
+Suppose to start the _known distribution_ modality simulation with 3 input genomes and the following `abundance.tsv` file.
 
 ```
+E.coli	0.5
+S.aureus	0.3
+S.pneumoniae	0.2
+```
+
+Suppose also to require 9 final genomes, so that 6 new strains will be generated from E.coli, S.aureus and S.pneumoniae. Notice that the starting genome for the simulation of these 6 new strains is strongly
+affected by the `equally_distributed_strains` parameter, as described in previous sections. For simplicity, let's assume `equally_distributed_strains = True`.
+
+Of course, the output population distribution depends also on the `input_genomes_to_zero` parameter; let's say it is set to `True`, so that the final distribution may be something like:
+
+```
+E.coli  0.0
+S.aureus        0.0
+S.pneumoniae    0.0
+simulated-E.coli.Taxon001		
+simulated-E.coli.Taxon012	
+simulated-S.aureus.Taxon007	
+simulated-S.aureus.Taxon032	
+simulated-S.pneumoniae.Taxon024	
+simulated-S.pneumoniae.Taxon017	
+```
+Notice that the sum of the abundances of the same genome's strains is equal to the original genome's abundance. 
+
+The relative abundance of each strain is generated through the `Broken_stick_model` function implemented in the `populationdistribution.py` script. The idea is to divide the original abundance in
+sticks, whose lengths depends on a Beta distribution sampling (with parameter `a = 1` and `b = 3`). The following image shows the Beta distribution (asymmetric) behaviour for those parameters:
+
+<div align="center">
+<p><img src="Beta_distribution.png" width="600" /></p>
+</div>
+
+This asymmetry is compatible with the expected distribution of strains, biologically.
+
+Once the sampling is performed, an array of Beta-distributed numbers is obtained. This array is then used to get the sticks lengths, i.e. the relative abundances of the strains.
+To do so, the _k_-element of the list of abundances is evaluated as the result of the cumulative product of the previously obtained _k-1_ abundances (starting with _(k = 0)_-element being equal to the first 
+Beta-distributed number).
+
+### Example of configuration file:
+Here, an example of configuration file is proposed. Starting from the following settings, a simulation in the _known distribution_ modality will be launched. 
+
+```
+[Main]
+seed = 42
+phase = 
+max_processor = 8
+dataset_id = RL
+output_directory = path_to_population/out
+temp_directory = /tmp
+gsa = False
+pooled_gsa = False
+anonymous = True
+compress = 1
+
+[ReadSimulator]
+readsim = CAMISIM/tools/art_illumina-2.3.6/art_illumina
+error_profiles = CAMISIM/tools/art_illumina-2.3.6/profiles
+samtools = CAMISIM/tools/samtools-1.3/samtools
+profile = mbarc
+size = 0.1
+type = art
+fragments_size_mean = 270
+fragment_size_standard_deviation = 27
+
+[CommunityDesign]
+ncbi_taxdump = CAMISIM/tools/ncbi-taxonomy_20170222.tar.gz
+strain_simulation_template = CAMISIM/scripts/StrainSimulationWrapper/sgEvolver/simulation_dir
+number_of_samples = 3
+
+[community0]
+metadata = path_to_population/.../metadata.tsv
+id_to_genome_file = path_to_population/...//genome_to_id.tsv
+id_to_gff_file = 
+path_to_abundance_file = path_to_population/.../abundance.tsv
+genomes_total = 15
+num_real_genomes = 3
+max_strains_per_otu = 1
+ratio = 1
+equally_distributed_strains = True
+input_genomes_to_zero = True
+mode = known_distribution
+log_mu = 1
+log_sigma = 2
+gauss_mu = 1
+gauss_sigma = 1
+view = False
+```
+
+# What's new in the scripts
+In this last section, a list of the new implemented functions and where to find them is shown.
+
+In the `scripts/PopulationDistribution/populationdistribution.py` script:
+
+```python
+@staticmethod
+def Broken_stick_model (...):
+
+def distribute_abundance_to_strains (...):
+
+def get_lists_of_distributions (...):
+  '''
+    This function has been partially modified to include the previous ones
+  '''
+```
+
+In the `scripts/InputFilePreparation/input_file_preparation.py` script:
+```python
+def amr_pipeline (...):
+  '''
+    This function collects the 9 (new) functions defined in the same script 
+  '''
+```
+
+In the `scripts/ComunityDesign/communitydesign.py` and in the `scripts/StrainSelector/strainselector.py` scripts, two functions have been partially modified:
+```python
+def design_samples (...):
+  '''
+    In communitydesign.py
+  '''
+
+def draw_strains (...):
+  '''
+    In strainselector.py
+  '''
+```
+
+A few minor changes have been written in some other functions, without affecting them: the goal was to present a tool consistent with the original one (CAMISIM), enriching it with a new framework, but
+also preserving it.
 
 # References
 [1] Fritz, A. Hofmann, P. et al, **CAMISIM: Simulating metagenomes and microbial communities**, _Microbiome_, 2019, 7:17, doi: [10.1186/s40168-019-0633-6](https://doi.org/10.1186/s40168-019-0633-6), github: [CAMI-challenge/CAMISIM](https://github.com/CAMI-challenge/CAMISIM)
