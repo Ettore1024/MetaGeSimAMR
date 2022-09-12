@@ -135,6 +135,10 @@ Hence, to use the Snakemake pipeline, and so the entire **MetaGeSim-AMR** tool, 
 
 where `out/` is the directory of the CAMISIM output the user wants to create, while `path_to_population/.../` is the path to the folder containing the two input files.
 
+To check if the **MetaGeSim-AMR** tool works properly, a test run can be launched with the following command:
+
+   snakemake scripts/tests/input_population/out --use-conda
+
 In case the user only wants to use the CAMISIM part (with its input files already written), he/she can choose to use the command above (where only the rule `camisim` will be called) or the following one:
 
     python metagenomesimulation.py path_to_config/.../config.ini 
@@ -254,30 +258,30 @@ def Broken_stick_model (...):
 def distribute_abundance_to_strains (...):
 
 def get_lists_of_distributions (...):
-  '''
-    This function has been partially modified to include the previous ones
-  '''
+    '''
+        This function has been partially modified to include the previous ones
+    '''
 ```
 
 In the `scripts/InputFilePreparation/input_file_preparation.py` script:
 ```python
 def amr_pipeline (...):
-  '''
-    This function collects the 9 (new) functions defined in the same script 
-  '''
+    '''
+      This function collects the 9 (new) functions defined in the same script 
+    '''
 ```
 
 In the `scripts/ComunityDesign/communitydesign.py` and in the `scripts/StrainSelector/strainselector.py` scripts, two functions have been partially modified:
 ```python
 def design_samples (...):
-  '''
-    In communitydesign.py
-  '''
+    '''
+      In communitydesign.py
+    '''
 
 def draw_strains (...):
-  '''
-    In strainselector.py
-  '''
+    '''
+      In strainselector.py
+    '''
 ```
 
 All the functions are properly explained through a comment when their defintion is implemented.
