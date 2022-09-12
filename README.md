@@ -286,7 +286,7 @@ def draw_strains (...):
     '''
 ```
 
-All the functions are properly explained through a comment when their defintion is implemented.
+All the functions are properly explained through a comment when their definition is implemented.
 
 A few minor changes have been written in some other functions, without affecting them: the goal was to present a tool consistent with the original one (CAMISIM), enriching it with a new framework, but
 also preserving it.
