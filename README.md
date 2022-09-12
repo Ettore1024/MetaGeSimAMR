@@ -167,20 +167,21 @@ Of course, the output population distribution depends also on the `input_genomes
 E.coli  0.0
 S.aureus        0.0
 S.pneumoniae    0.0
-simulated-E.coli.Taxon001		
-simulated-E.coli.Taxon012	
-simulated-S.aureus.Taxon007	
-simulated-S.aureus.Taxon032	
-simulated-S.pneumoniae.Taxon024	
-simulated-S.pneumoniae.Taxon017	
+simulated-E.coli.Taxon001	0.00116754672179425
+simulated-E.coli.Taxon012	0.49883245327820575
+simulated-S.aureus.Taxon007	0.14732330794473567
+simulated-S.aureus.Taxon032	0.15267669205526433
+simulated-S.pneumoniae.Taxon024	0.04000494716269476
+simulated-S.pneumoniae.Taxon017	0.15999505283730524
 ```
+
 Notice that the sum of the abundances of the same genome's strains is equal to the original genome's abundance. 
 
 The relative abundance of each strain is generated through the `Broken_stick_model` function implemented in the `populationdistribution.py` script. The idea is to divide the original abundance in
 sticks, whose lengths depends on a Beta distribution sampling (with parameter `a = 1` and `b = 3`). The following image shows the Beta distribution (asymmetric) behaviour for those parameters:
 
 <div align="center">
-<p><img src="Beta_distribution.png" width="600" /></p>
+<p><img src="Beta_distribution.png" width="300" /></p>
 </div>
 
 This asymmetry is compatible with the expected distribution of strains, biologically.
