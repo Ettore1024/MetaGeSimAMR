@@ -6,11 +6,11 @@ __pycache__/
 .snakemake/
 
 #Ignore generated CAMISIM's input files
-tests/input_population/abundance.tsv
-tests/input_population/config.ini
-tests/input_population/genome_to_id.tsv
-tests/input_population/genomes_info.json
-tests/input_population/metadata.tsv
+scripts/tests/input_population/abundance.tsv
+scripts/tests/input_population/config.ini
+scripts/tests/input_population/genome_to_id.tsv
+scripts/tests/input_population/genomes_info.json
+scripts/tests/input_population/metadata.tsv
 
 #Ignore CAMISIM's output directory
-tests/input_population/out/
+scripts/tests/input_population/out/

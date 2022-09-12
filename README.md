@@ -131,13 +131,15 @@ CAMISIM (in the _known distribution_ modality), one calling the `input_file_prep
 
 Hence, to use the Snakemake pipeline, and so the entire **MetaGeSim-AMR** tool, the following command should be used:
 
-    snakemake path_to_population/.../out --use-conda
+    snakemake -cT path_to_population/.../out --use-conda
 
-where `out/` is the directory of the CAMISIM output the user wants to create, while `path_to_population/.../` is the path to the folder containing the two input files.
+where `out/` is the directory of the CAMISIM output the user wants to create, while `path_to_population/.../` is the path to the folder containing the two input files and `-cT` is the (mandatory) flag,
+through which the user chooses the maximum number of threads `T`. It is worth mentioning that `T` should be set equal to the maximum number of processors chosen in the `input.json` file (where it is
+specified through `max_processor`).
 
 To check if the **MetaGeSim-AMR** tool works properly, a test run can be launched with the following command:
 
-    snakemake scripts/tests/input_population/out --use-conda
+    snakemake -c8 scripts/tests/input_population/out --use-conda
 
 In case the user only wants to use the CAMISIM part (with its input files already written), he/she can choose to use the command above (where only the rule `camisim` will be called) or the following one:
 
