@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "MetaGeSim-AMR"
+authors:
+  - family-names: "Rocchi"
+    given-names: "Ettore"
+    orcid: "https://orcid.org/0000-0002-7612-2819"
+repository-code: "https://github.com/EttoreRocchi/MetaGeSim-AMR.git"
+
+# Reference to CAMISIM
+references:
+  - type: software
+    title: "CAMISIM"
+    date: 2019
+    authors:
+      - family-names: "Fritz"
+        given-names: "Adrian"
+      - family-names: "Hofmann"
+        given-names: "Peter"
+    repository-code: "https://github.com/CAMI-challenge/CAMISIM.git"
+    identifiers:
+      - type: doi
+        value: "10.1186/s40168-019-0633-6"
+    license: "Apache-2.0"
